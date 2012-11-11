@@ -188,22 +188,27 @@ io.sockets.on('connection', function (socket) {
 
     socket.on('keydown', function (code) {
         console.log(code);
-        if (37 <= code && code <= 40 || code == 32) {
-            if (code == 37) {
-                moveVector.x += (-1);
-            }
-            else if (code == 39) {
-                moveVector.x += 1;
-            }
-            else if (code == 38) {
-                moveVector.y += (-1);
-            }
-            else if (code == 40) {
-                moveVector.y += 1;
-            }
-            else if (code == 32) {
-                moveVector.mode = "tarbo";
-            }
+        switch (code){
+            case 37 :
+                socket.emit('resSoundEffect',  { effect:'se01' });
+                socket.broadcast.emit('resSoundEffect',  { effect:'se01' });
+                socket.emit('resSoundEffect',  { effect:'se04' });
+                socket.broadcast.emit('resSoundEffect',  { effect:'se04' });
+                break;
+            case 38 :
+                socket.emit('resSoundEffect',  { effect:'se03' });
+                socket.broadcast.emit('resSoundEffect',  { effect:'se03' });
+                socket.emit('resSoundEffect',  { effect:'se06' });
+                socket.broadcast.emit('resSoundEffect',  { effect:'se06' });
+                break;
+            case 39 :
+                socket.emit('resSoundEffect',  { effect:'se02' });
+                socket.broadcast.emit('resSoundEffect',  { effect:'se02' });
+                socket.emit('resSoundEffect',  { effect:'se05' });
+                socket.broadcast.emit('resSoundEffect',  { effect:'se05' });
+                break;
+            default :
+                break;
         }
     });
 

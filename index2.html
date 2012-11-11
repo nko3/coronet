@@ -89,6 +89,10 @@ function stage() {
     titleH1.id = 'title';
     $('div#sideBox').append(titleH1);
 
+    var descriptionP = document.createElement('p');
+    descriptionP.id = 'description';
+    $('div#sideBox').append(descriptionP);
+
     var copyP = document.createElement('p');
     copyP.id = 'copy';
     $('div#sideBox').append(copyP);
@@ -136,19 +140,21 @@ function stage() {
     $('div#btnArea04').append(canvasBtn(6));
 
 
-    $('#copy').text('Atabaque Berimbau Pandeiro Agogô Reco-reco');
-    $('#title').text('WE WILL CAPOEIRA YOU');
+    $('#description').html('Atabaque - left<br>Berimbau - up<br>Atabaque- right');
+    $('#title').html('WE WILL CAPO<br>EIRA YOU');
+    $('#copy').html('© TEAM Coronet Internet Service.');
 
     $('canvas').css({
         'margin':'0px 0px 9px 0',
         'padding':'0px',
         'display':'none'
     });
-    $('body').css({'padding':'0px', 'margin':'0px'});
-    $('#debug').css({'color':'#ffffff', 'float':'left'});
-//			$('#Btn01').css({'padding':'5px'});
-//			$('#Btn02').css({'padding':'0 5px 5px 5px'});
-//			$('#Btn03').css({'padding':'5px 5px 5px 0'});
+    $('body').css({
+        'padding':'0px',
+        'margin':'0px',
+        'background-color':'#111'
+    });
+
     $('div#wrapper').css({
         'min-height':windowHeight,
         'width':$(window).width(),
@@ -167,9 +173,11 @@ function stage() {
         'border-right':'1px solid rgba(0,0,0,.5)',
         '-webkit-box-shadow':'1px 1px 2px rgba(255,255,255,.1)',
         '-moz-box-shadow':'1px 1px 2px rgba(255,255,255,.1)',
-        'padding':'0 10px 0 5px',
-        'z-index':'-1'
-    });
+        'padding':'0 10px 0 8px',
+        'z-index':'-1',
+        'white-space': 'pre',
+        'white-space': 'pre-line'
+});
     $('div.scene01').css({
         'display':'inline-block',
         'margin-right':'10px',
@@ -177,24 +185,38 @@ function stage() {
         'position':'relative',
         'float':'left'
     });
-    $('#copy').css({
+    $('#description').css({
         'font-size':'18px',
         'text-shadow':'1px 1px 0px #111'
     });
     $('#title').css({
         'text-shadow':'1px 1px 0px #111',
         'font-size':'62px',
-        'font-family':'\'Russo One\', Arial, serif; font-weight: 400',
+        'font-family':'serif',
         'display':'inline-block',
         'margin-right':'10px',
         'width':windowHeight / 2 * 0.631,
         'position':'relative',
-        'float':'left'
+        'float':'left',
+        'line-height':'0.9em'
+    });
+    $('#copy').css({
+        'font-size':'10px',
+        'text-shadow':'1px 1px 0px #111',
+        'color':'#333',
+//        'margin-top':windowHeight / 3
+        'position':'absolute',
+        'bottom':'0px',
+        'left':'10px',
+        'width':'180px'
     });
 
-    $(window).keydown(function (e) {
-        console.log('keydown');
-        socket.emit('keydown', code);
+
+
+
+    $(document).keydown(function (e) {
+        console.log(e.keyCode);
+        socket.emit('keydown', e.keyCode);
     });
 }
 
