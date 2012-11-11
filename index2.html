@@ -1,91 +1,94 @@
-<html lang="ja">
+<html lang='ja'>
 <head>
-	<meta http-equiv="X-UA-Compatible" content="IE=9">
-	<meta charset="UTF-8">
-	<script src="/socket.io/socket.io.js"></script>
-	<script src="//cdnjs.cloudflare.com/ajax/libs/jquery/1.8.2/jquery.min.js"></script>
-	<script src="//cdnjs.cloudflare.com/ajax/libs/jquery-easing/1.3/jquery.easing.min.js"></script>
-	<script src="design.js"></script>
-	<script src="click.js"></script>
-	<script src="audio.js"></script>
-	<script>
-	var strUA = navigator.userAgent.toLowerCase();
-	var uaFlag;
-	if(strUA.indexOf("iphone") != -1){
-		uaFlag = "iphone";
-		console.log("iphone");
-	}
+<meta http-equiv='X-UA-Compatible' content='IE=9'>
+<meta charset='UTF-8'>
+<script src='/socket.io/socket.io.js'></script>
+<script src='//cdnjs.cloudflare.com/ajax/libs/jquery/1.8.2/jquery.min.js'></script>
+<script src='//cdnjs.cloudflare.com/ajax/libs/jquery-easing/1.3/jquery.easing.min.js'></script>
+<link href='//fonts.googleapis.com/css?family=Russo+One' rel='stylesheet' type='text/css'>
+<script src='design.js'></script>
+<script src='click.js'></script>
+<script src='audio.js'></script>
+<script>
+var strUA = navigator.userAgent.toLowerCase();
+var uaFlag;
+var windowHeight = $(window).height();
+
+if(strUA.indexOf('iphone') != -1){
+	uaFlag = 'iphone';
+	console.log('iphone');
+}
+
+var socket = io.connect('http://coronet.nko3.jitsu.com/');
+socket.on('resDisply', function (start) {
+	bgmusic = new Audio('sound/bgm.' + extension());
+	console.log('sound/bgm.' + extension());
+	bgmusic.volume = 0.3;
+	bgmusic.play();
+	stage();
+	fade()
+	console.log(socket.socket.sessionid);
+
+});
 
 
-	var socket = io.connect('http://0.0.0.0:8000/');
-		socket.on('resDisply', function (start) {
-			bgmusic = new Audio("sound/bgm." + extension());
-			console.log("sound/bgm." + extension());
-			bgmusic.play();
-			stage();
-			fade()
-			console.log(socket.socket.sessionid);
-
-		});
-
-
-		/* ★・・・・・・★・・・・・・★・・・・・・★・・・・・・★・・・・・・
-		 // Catha SE action:
-		 ★・・・・・・★・・・・・・★・・・・・・★・・・・・・★・・・・・・ */
-		socket.on('resSoundEffect', function (res) {
-			if(uaFlag == 'iphone'){
-				console.log(res.effect);
-				sound = new Audio("sound/bgm." + extension());
-				sound.play();
+/* ★・・・・・・★・・・・・・★・・・・・・★・・・・・・★・・・・・・
+ // Catha SE action:
+ ★・・・・・・★・・・・・・★・・・・・・★・・・・・・★・・・・・・ */
+socket.on('resSoundEffect', function (res) {
+	if(uaFlag == 'iphone'){
+		console.log(res.effect);
+		sound = new Audio('sound/bgm.' + extension());
+		sound.play();
 
 
 //				soundList[res.effect].play();
-				console.log("sound/bgm." + extension());
-			}else {
-				console.log(res.effect);
-				soundList[res.effect].play();
-				soundList[res.effect] = new Audio(soundList[res.effect].src);
-				console.log(extension());
-			}
+		console.log('sound/bgm.' + extension());
+	}else {
+		console.log(res.effect);
+		soundList[res.effect].play();
+		soundList[res.effect] = new Audio(soundList[res.effect].src);
+		console.log(extension());
+	}
 
-		});
+});
 
-		function clickMotion(effect){
+function clickMotion(effect){
 
-			var targetId =  "canvas#" + effect;
-			var canvasWidth = $(targetId).width()-20;
-			console.log(targetId);
-			console.log(canvasWidth);
-			var canvasHeight = $(targetId).height()-20;
+	var targetId =  'canvas#' + effect;
+	var canvasWidth = $(targetId).width()-20;
+	console.log(targetId);
+	console.log(canvasWidth);
+	var canvasHeight = $(targetId).height()-20;
 
 //			$(targetId).click(function () {
 
 
 
-				$(targetId).
-						animate({ opacity:.5, height: '+=20', width: '+=20'
-						}, {
-							duration:'fast',
+	$(targetId).
+			animate({ opacity:.5, height: '+=20', width: '+=20'
+			}, {
+				duration:'fast',
 //							queue:false,
-							easing:'easeInOutBounce'
-						})
+				easing:'easeInOutBounce'
+			})
 //						.animate({ opacity:1, height: '+=20', width: '+=20'
 //						}, {
 //							duration:'fast',
 //							queue:false,
 //							easing:'easeInOutBounce'
 //						});
-						,function () {
-							$(targetId).animate({
-								opacity:1,
-								height: canvasHeight,
-								width: canvasWidth
-							}, {
-								duration:'fast',
+			,function () {
+		$(targetId).animate({
+			opacity:1,
+			height: canvasHeight,
+			width: canvasWidth
+		}, {
+			duration:'fast',
 //								queue:false,
-								easing:'easeInOutBounce'
-				})
-			}
+			easing:'easeInOutBounce'
+		})
+	}
 
 //				});
 
@@ -101,201 +104,205 @@
 //					easing:'easeInOutBounce'
 //				})
 //			});
-		}
+}
 
 
-		function canvasBtn(size) {
-			switch (size) {
-				case 1:
-					var canvasBtn01 = document.createElement('canvas');
-					canvasBtn01.width = cubeWidth();
-					canvasBtn01.height = cubeHeight(1);
-					canvasBtn01.id = 'se01';
-					canvasBtn01.addEventListener('click', canvasOnClick01, false);
-					var contextBtn01 = canvasBtn01.getContext('2d');
-					contextBtn01.beginPath();
-					contextBtn01.fillStyle = rundumRGB();
-					contextBtn01.fillRect(
-							horizontal(),
-							vertical(),
-							cubeWidth(),
-							cubeHeight(1)
-					);
 
-					return canvasBtn01;
-				case 2:
-					var canvasBtn01 = document.createElement('canvas');
-					canvasBtn01.width = cubeWidth();
-					canvasBtn01.height = cubeHeight(1);
-					canvasBtn01.id = 'se02';
-					canvasBtn01.addEventListener('click', canvasOnClick02, false);
-					var contextBtn01 = canvasBtn01.getContext('2d');
-					contextBtn01.beginPath();
-					contextBtn01.fillStyle = rundumRGB();
-					contextBtn01.fillRect(
-							horizontal(),
-							vertical(),
-							cubeWidth(),
-							cubeHeight(1)
-					);
+/* ★・・・・・・★・・・・・・★・・・・・・★・・・・・・★・・・・・・
+ // Layout action:
+ ★・・・・・・★・・・・・・★・・・・・・★・・・・・・★・・・・・・ */
+function stage() {
 
-					return canvasBtn01;
-				case 3:
-					var canvasBtn01 = document.createElement('canvas');
-					canvasBtn01.width = cubeWidth();
-					canvasBtn01.height = cubeHeight(2);
-					canvasBtn01.id = 'se03';
-					canvasBtn01.addEventListener('click', canvasOnClick03, false);
-					var contextBtn01 = canvasBtn01.getContext('2d');
-					contextBtn01.beginPath();
-					contextBtn01.fillStyle = rundumRGB();
-					contextBtn01.fillRect(
-							horizontal(),
-							vertical(),
-							cubeWidth(),
-							cubeHeight(2)
-					);
+	var wrapperDiv = document.createElement('div');
+	wrapperDiv.id = 'wrapper';
+	document.body.appendChild(wrapperDiv);
 
-					return canvasBtn01;
-			}
+	var sideBoxDiv = document.createElement('div');
+	sideBoxDiv.id = 'sideBox';
+	$('div#wrapper').append(sideBoxDiv);
 
-		}
+	var titleH1 = document.createElement('h1');
+	titleH1.id = 'title';
+	$('div#sideBox').append(titleH1);
 
-		/* ★・・・・・・★・・・・・・★・・・・・・★・・・・・・★・・・・・・
-		 // Layout action:
-		 ★・・・・・・★・・・・・・★・・・・・・★・・・・・・★・・・・・・ */
-		function stage() {
+	var copyP = document.createElement('p');
+	copyP.id = 'copy';
+	$('div#sideBox').append(copyP);
 
-			var wrapperDiv = document.createElement('div');
-			wrapperDiv.id = "wrapper";
-			document.body.appendChild(wrapperDiv);
-
-			var sideBoxDiv = document.createElement('div');
-			sideBoxDiv.id = "sideBox";
-			$("div#wrapper").append(sideBoxDiv);
-
-			/* ★・・・・・・★・・・・・・★・・・・・・★・・・・・・★・・・・・・ */
+	/* ★・・・・・・★・・・・・・★・・・・・・★・・・・・・★・・・・・・ */
 // scene 1:
 
-			var btnArea01Div = document.createElement('div');
-			btnArea01Div.id = "btnArea01";
-			btnArea01Div.className = "scene01";
-			$("div#wrapper").append(btnArea01Div);
+	var btnArea01Div = document.createElement('div');
+	btnArea01Div.id = 'btnArea01';
+	btnArea01Div.className = 'scene01';
+	$('div#wrapper').append(btnArea01Div);
 
-			var btnArea02Div = document.createElement('div');
-			btnArea02Div.id = "btnArea02";
-			btnArea02Div.className = "scene01";
-			$("div#wrapper").append(btnArea02Div);
+	var btnArea02Div = document.createElement('div');
+	btnArea02Div.id = 'btnArea02';
+	btnArea02Div.className = 'scene01';
+	$('div#wrapper').append(btnArea02Div);
 
-			var btnArea03Div = document.createElement('div');
-			btnArea03Div.id = "btnArea03";
-			btnArea03Div.className = "scene01";
-			$("div#wrapper").append(btnArea03Div);
+	var btnArea03Div = document.createElement('div');
+	btnArea03Div.id = 'btnArea03';
+	btnArea03Div.className = 'scene01';
+	$('div#wrapper').append(btnArea03Div);
 
-			var btnArea04Div = document.createElement('div');
-			btnArea04Div.id = "btnArea04";
-			btnArea03Div.className = "scene01";
-			$("div#wrapper").append(btnArea04Div);
+	var btnArea04Div = document.createElement('div');
+	btnArea04Div.id = 'btnArea04';
+	btnArea03Div.className = 'scene01';
+	$('div#wrapper').append(btnArea04Div);
 
-			/* ★・・・・・・★・・・・・・★・・・・・・★・・・・・・★・・・・・・ */
+	/* ★・・・・・・★・・・・・・★・・・・・・★・・・・・・★・・・・・・ */
 // css:
 
-			$("canvas").css({"padding":"0px", "margin":"0px"});
-			$("body").css({"padding":"0px", "margin":"0px"});
-			$("#debug").css({"color":"#ffffff", "float":"left"});
-			$("#Btn01").css({"padding":"5px"});
-			$("#Btn02").css({"padding":"0 5px 5px 5px"});
-			$("#Btn03").css({"padding":"5px 5px 5px 0"});
-			$("div#wrapper").css({
-				"min-height":$(window).height(),
-				"width":$(window).width(),
-				"display":"block",
-				"margin":"0 auto",
-				"background-color":"#111",
-				"overflow":"auto",
-				"height":"100%"
-			});
-			$("div#sideBox").css({
-				"width":"185px",
-				"float":"left",
-				"height":"100%",
-				"margin-right":"auto",
-				"background-color":"#222",
-				"border-right":"1px solid rgba(0,0,0,.5)",
-				"-webkit-box-shadow":"1px 1px 2px rgba(255,255,255,.1)",
-				"-moz-box-shadow":"1px 1px 2px rgba(255,255,255,.1)"
-			});
-			$("div.scene01").css({
-				"display":"inline-block",
-				"width":"166px",
-				"position":"relative",
-				"float":"left"
-			});
+
 
 //	console.log(rundumRGB());
 
 
-			$("div#btnArea01").append(canvasBtn(1));
-			$("div#btnArea01").append(canvasBtn(2));
-			$("div#btnArea02").append(canvasBtn(3));
-			$("div#btnArea03").append(canvasBtn(1));
-			$("div#btnArea03").append(canvasBtn(2));
-			$("div#btnArea04").append(canvasBtn(3));
+	$('div#btnArea01').append(canvasBtn(1));
+	$('div#btnArea01').append(canvasBtn(2));
+	$('div#btnArea02').append(canvasBtn(3));
+	$('div#btnArea03').append(canvasBtn(4));
+	$('div#btnArea03').append(canvasBtn(5));
+	$('div#btnArea04').append(canvasBtn(6));
 
 
+	$('#copy').text('Atabaque Berimbau Pandeiro Agogô Reco-reco');
+	$('#title').text('WE WILL CAPOEIRA YOU');
 
-		}
+	$('canvas').css({'margin':'0px 0px 9px 0', 'padding':'0px'});
+	$('body').css({'padding':'0px', 'margin':'0px'});
+	$('#debug').css({'color':'#ffffff', 'float':'left'});
+//			$('#Btn01').css({'padding':'5px'});
+//			$('#Btn02').css({'padding':'0 5px 5px 5px'});
+//			$('#Btn03').css({'padding':'5px 5px 5px 0'});
+	$('div#wrapper').css({
+		'min-height':windowHeight,
+		'width':$(window).width(),
+		'display':'block',
+		'margin':'0 auto',
+		'background-color':'#111',
+		'overflow':'auto',
+		'height':'100%'
+	});
+	$('div#sideBox').css({
+		'width':'185px',
+		'float':'left',
+		'height':windowHeight,
+		'margin-right':'10px',
+		'background-color':'#1a1a1a',
+		'border-right':'1px solid rgba(0,0,0,.5)',
+		'-webkit-box-shadow':'1px 1px 2px rgba(255,255,255,.1)',
+		'-moz-box-shadow':'1px 1px 2px rgba(255,255,255,.1)',
+		'padding':'0 10px 0 5px',
+		'z-index':'-1'
+	});
+	$('div.scene01').css({
+		'display':'inline-block',
+		'margin-right':'10px',
+		'width': windowHeight/2*0.631,
+		'position':'relative',
+		'float':'left'
+	});
+	$('#copy').css({
+		'font-size': '18px',
+		'text-shadow': '1px 1px 0px #111'
+	});
+	$('#title').css({
+		'text-shadow': '1px 1px 0px #111',
+		'font-size': '62px',
+		'font-family': '\'Russo One\', Arial, serif; font-weight: 400',
+		'display':'inline-block',
+		'margin-right':'10px',
+		'width': windowHeight/2*0.631,
+		'position':'relative',
+		'float':'left'
+	});
+}
 
 
+function canvasOnClick01(e) {
+	var cell = getCursorPosition(e);
+
+	if (cell.horizontal > horizontal(1) + 185 &&
+			cell.horizontal < horizontal(1) + cubeWidth() + 185 &&
+			cell.vertical > vertical(1)  &&
+			cell.vertical < vertical(1) + cubeHeight(1)
+			) {
+		socket.emit('soundEffect', { effect:'se01' });
+	}
+}
+
+function canvasOnClick02(e) {
+	var cell = getCursorPosition(e);
+
+	if (cell.horizontal > horizontal(2) + 185 &&
+			cell.horizontal < horizontal(2) + cubeWidth() + 185 &&
+			cell.vertical > vertical(2)  &&
+			cell.vertical < vertical(2) + cubeHeight(1)
+			) {
+		socket.emit('soundEffect', { effect:'se02' });
+	}
+}
+
+function canvasOnClick03(e) {
+	var cell = getCursorPosition(e);
+	if (cell.horizontal > horizontal(3) + 185 &&
+			cell.horizontal < horizontal(3) + cubeWidth() + 185 &&
+			cell.vertical > vertical(3)  &&
+			cell.vertical < vertical(3) + cubeHeight(2)
+			) {
+
+		socket.emit('soundEffect', { effect:'se03' });
+	}
+}
 
 
+function canvasOnClick04(e) {
+	var cell = getCursorPosition(e);
 
+	if (cell.horizontal > horizontal(4) + 185 + 40 &&
+			cell.horizontal < horizontal(4) + cubeWidth() + 185 + 40 &&
+			cell.vertical > vertical()  &&
+			cell.vertical < vertical() + cubeHeight()
+			) {
+		socket.emit('soundEffect', { effect:'se01' });
+	}
+}
 
+function canvasOnClick05(e) {
+	var cell = getCursorPosition(e);
+//	console.log(cell.horizontal);
+//	console.log(cell.vertical);
+//	console.log('-------------')
+//	console.log(horizontal(4) + 185 + 40 );
+//	console.log(horizontal(4) + cubeWidth() + 185 + 40);
+//	console.log(vertical(2));
+//	console.log(vertical(2) + cubeHeight(1));
 
+	if (cell.horizontal > horizontal(4) + 185 + 40 &&
+			cell.horizontal < horizontal(4) + cubeWidth() + 185 + 40 &&
+			cell.vertical > vertical(2)  &&
+			cell.vertical < vertical(2) + cubeHeight()
+			) {
+		socket.emit('soundEffect', { effect:'se02' });
+	}
+}
 
-		function canvasOnClick01(e) {
-			var cell = getCursorPosition(e);
+function canvasOnClick06(e) {
+	var cell = getCursorPosition(e);
+	if (cell.horizontal > horizontal(5) + 185 + 40 &&
+			cell.horizontal < horizontal(5) + cubeWidth() + 185 +40 &&
+			cell.vertical > vertical(3)  &&
+			cell.vertical < vertical(3) + cubeHeight(2)
+			) {
 
-			if (cell.horizontal > horizontal(1) + 185 &&
-					cell.horizontal < horizontal(1) + cubeWidth() + 185 &&
-					cell.vertical > vertical(1)  &&
-					cell.vertical < vertical(1) + cubeHeight(1)
-					) {
-				socket.emit('soundEffect', { effect:'se01' });
-			}
-		}
+		socket.emit('soundEffect', { effect:'se03' });
+	}
+}
 
-		function canvasOnClick02(e) {
-			var cell = getCursorPosition(e);
-
-			if (cell.horizontal > horizontal(2) + 185 &&
-					cell.horizontal < horizontal(2) + cubeWidth() + 185 &&
-					cell.vertical > vertical(2)  &&
-					cell.vertical < vertical(2) + cubeHeight(1)
-					) {
-				socket.emit('soundEffect', { effect:'se02' });
-			}
-		}
-
-		function canvasOnClick03(e) {
-			var cell = getCursorPosition(e);
-//			console.log(cell.horizontal);
-//			console.log(cell.vertical);
-//			console.log(horizontal());
-//			console.log(cubeWidth());
-//			console.log(vertical());
-//			console.log(cubeHeight(1));
-			if (cell.horizontal > horizontal(3) + 185 &&
-					cell.horizontal < horizontal(3) + cubeWidth() + 185 &&
-					cell.vertical > vertical(3)  &&
-					cell.vertical < vertical(3) + cubeHeight(2)
-					) {
-
-				socket.emit('soundEffect', { effect:'se03' });
-			}
-		}
-
-	</script>
+</script>
 </head>
 <body>
 </body>

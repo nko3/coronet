@@ -13,7 +13,6 @@ function fade(){
 	 ★・・・・・・★・・・・・・★・・・・・・★・・・・・・★・・・・・・ */
 	console.log($('canvas#Btn').height());
 
-
 	$('canvas').hover(function () {
 		$(this).animate({
 			opacity:.5
