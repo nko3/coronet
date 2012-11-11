@@ -48,6 +48,10 @@ function handler(req, res) {
 		var clickJs = fs.readFileSync('./click.js');
 		res.writeHead(200, {'Content-Type':'application/x-javascript' });
 		res.end(clickJs, 'utf8');
+	}else if (action == '/sound/bgm.ogg') {
+		var bgOgg = fs.readFileSync('./sound/bgm.ogg');
+		res.writeHead(200, {'Content-Type':'audio/ogg' });
+		res.end(bgOgg, 'binary');
 	}else if (action == '/sound/se01.ogg') {
 		var seOgg1 = fs.readFileSync('./sound/se01.ogg');
 		res.writeHead(200, {'Content-Type':'audio/ogg' });
@@ -60,23 +64,51 @@ function handler(req, res) {
 		var seOgg3 = fs.readFileSync('./sound/se03.ogg');
 		res.writeHead(200, {'Content-Type':'audio/ogg' });
 		res.end(seOgg3, 'binary');
+	}else if (action == '/sound/bgm.mp3') {
+		var bgMp = fs.readFileSync('./sound/bgm.mp3');
+		res.writeHead(200, {'Content-Type':'audio/mp3' });
+		res.end(bgMp, 'binary');
+	}else if (action == '/sound/se01.mp3') {
+		var seMp1 = fs.readFileSync('./sound/se01.mp3');
+		res.writeHead(200, {'Content-Type':'audio/mp3' });
+		res.end(seMp1, 'binary');
+	}else if (action == '/sound/se02.mp3') {
+		var seMp2 = fs.readFileSync('./sound/se02.mp3');
+		res.writeHead(200, {'Content-Type':'audio/mp3' });
+		res.end(seMp2, 'binary');
+	}else if (action == '/sound/se03.mp3') {
+		var seMp3 = fs.readFileSync('./sound/se03.mp3');
+		res.writeHead(200, {'Content-Type':'audio/mp3' });
+		res.end(seMp3, 'binary');
+	}else if (action == '/sound/bgm.wav') {
+		var bgWav = fs.readFileSync('./sound/bgm.wav');
+		res.writeHead(200, {'Content-Type':'audio/wav' });
+		res.end(bgWav, 'binary');
+	}else if (action == '/sound/se01.wav') {
+		var seWav1 = fs.readFileSync('./sound/se01.wav');
+		res.writeHead(200, {'Content-Type':'audio/wav' });
+		res.end(seWav1, 'binary');
+	}else if (action == '/sound/se02.wav') {
+		var seWav2 = fs.readFileSync('./sound/se02.wav');
+		res.writeHead(200, {'Content-Type':'audio/wav' });
+		res.end(seWav2, 'binary');
+	}else if (action == '/sound/se03.wav') {
+		var seWav3 = fs.readFileSync('./sound/se03.wav');
+		res.writeHead(200, {'Content-Type':'audio/wav' });
+		res.end(seWav3, 'binary');
 	}
 }
 
 io.sockets.on('connection', function (socket) {
 	socket.emit('resDisply', { disply:'start'});
-	socket.on('soundEffect1', function (data) {
-		socket.emit('resSoundEffect1', { effect:'se01' });
+	socket.broadcast.emit('resDisply', { disply:'start'});
+
+	socket.on('soundEffect', function (data) {
+		socket.emit('resSoundEffect', data);
+		socket.broadcast.emit('resSoundEffect', data);
 		console.log(data);
 	});
-	socket.on('soundEffect2', function (data) {
-		socket.emit('resSoundEffect2', { effect:'se02' });
-		console.log(data);
-	});
-	socket.on('soundEffect3', function (data) {
-		socket.emit('resSoundEffect3', { effect:'se03' });
-		console.log(data);
-	});
+
 	socket.on('disconnect', function(){
 		logging(socket.id);
 	});
@@ -104,7 +136,3 @@ function logging($socketId){
 		console.log(e);
 	})
 }
-
-
-
-

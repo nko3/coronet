@@ -1,6 +1,6 @@
 {
   "name": "nko3-coronet",
-  "version": "0.0.0-6",
+  "version": "0.0.0-9",
   "description": "CORONET",
   "main": "server.js",
   "scripts": {
@@ -10,7 +10,9 @@
     "type": "git",
     "url": "git@github.com:nko3/coronet.git"
   },
-  "dependencies": {},
+  "dependencies": {
+    "socket.io": "0.9.x"
+  },
   "engines": {
     "node": "0.8.x"
   },
